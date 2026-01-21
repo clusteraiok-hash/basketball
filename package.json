@@ -6,6 +6,7 @@
   "scripts": {
     "start": "node server.js",
     "dev": "node server.js",
+    "build": "echo 'Building static site...'",
     "init": "node database/migrate.js",
     "test": "mocha tests/**/*.test.js",
     "test:security": "mocha tests/security.test.js",
@@ -33,7 +34,12 @@
     "supertest": "^6.3.3",
     "sinon": "^17.0.1"
   },
-  "keywords": ["basketball", "booking", "courts", "local"],
+  "keywords": [
+    "basketball",
+    "booking",
+    "courts",
+    "local"
+  ],
   "author": "Basketball Academy",
   "license": "MIT"
 }

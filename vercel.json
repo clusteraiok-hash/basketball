@@ -1,0 +1,13 @@
+{
+    "version": 2,
+    "name": "dribble-ground-academy",
+    "cleanUrls": true,
+    "trailingSlash": false,
+    "framework": null,
+    "routes": [
+        {
+            "src": "/(.*)",
+            "dest": "/$1"
+        }
+    ]
+}
