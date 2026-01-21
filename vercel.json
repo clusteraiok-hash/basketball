@@ -3,6 +3,8 @@
     "name": "dribble-ground-academy",
     "cleanUrls": true,
     "trailingSlash": false,
+    "buildCommand": "echo 'Static Build Complete'",
+    "outputDirectory": ".",
     "routes": [
         {
             "src": "/(.*)",
