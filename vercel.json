@@ -3,7 +3,6 @@
     "name": "dribble-ground-academy",
     "cleanUrls": true,
     "trailingSlash": false,
-    "framework": null,
     "routes": [
         {
             "src": "/(.*)",
