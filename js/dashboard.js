@@ -692,3 +692,319 @@ function sendWhatsAppConfirmation() {
     const whatsappUrl = `https://wa.me/918084970887?text=${message}`;
     window.open(whatsappUrl, '_blank');
 }
+
+// --- Document Modal Functions ---
+
+const fakeDocumentContent = {
+    1: {
+        title: 'Player Registration Form',
+        content: `
+            <div class="space-y-6">
+                <h3 class="text-2xl font-bold text-slate-900 mb-6">Dribble Ground Academy - Player Registration</h3>
+                
+                <div class="bg-slate-50 p-6 rounded-2xl">
+                    <h4 class="font-bold text-slate-900 mb-4">Personal Information</h4>
+                    <div class="grid grid-cols-2 gap-4 text-sm">
+                        <div><strong>Full Name:</strong> [Player Name]</div>
+                        <div><strong>Date of Birth:</strong> [DD/MM/YYYY]</div>
+                        <div><strong>Age:</strong> [Age] years</div>
+                        <div><strong>Gender:</strong> [Male/Female/Other]</div>
+                        <div><strong>Email:</strong> [email@example.com]</div>
+                        <div><strong>Phone:</strong> [+91 XXXXX XXXXX]</div>
+                    </div>
+                </div>
+
+                <div class="bg-slate-50 p-6 rounded-2xl">
+                    <h4 class="font-bold text-slate-900 mb-4">Training Details</h4>
+                    <div class="space-y-3 text-sm">
+                        <div><strong>Program Type:</strong> Monthly/Weekly Training Pass</div>
+                        <div><strong>Preferred Schedule:</strong> Morning/Evening Sessions</div>
+                        <div><strong>Skill Level:</strong> Beginner/Intermediate/Advanced</div>
+                        <div><strong>Previous Experience:</strong> [Years of basketball experience]</div>
+                    </div>
+                </div>
+
+                <div class="bg-yellow-50 border-2 border-yellow-200 p-6 rounded-2xl">
+                    <h4 class="font-bold text-yellow-800 mb-3">Important Notes</h4>
+                    <ul class="text-sm text-yellow-700 space-y-2 list-disc list-inside">
+                        <li>This form must be completed before first training session</li>
+                        <li>Medical clearance required for players with pre-existing conditions</li>
+                        <li>Parent signature mandatory for players under 18 years</li>
+                        <li>Bring original ID proof for verification</li>
+                    </ul>
+                </div>
+            </div>
+        `
+    },
+    2: {
+        title: 'Payment Receipt',
+        content: `
+            <div class="space-y-6">
+                <h3 class="text-2xl font-bold text-slate-900 mb-6">Official Payment Receipt</h3>
+                
+                <div class="bg-green-50 border-2 border-green-200 p-6 rounded-2xl">
+                    <div class="flex items-center gap-3 mb-4">
+                        <div class="w-12 h-12 bg-green-500 rounded-full flex items-center justify-center">
+                            <i data-lucide="check" class="w-6 h-6 text-white"></i>
+                        </div>
+                        <h4 class="font-bold text-green-800">Payment Confirmed</h4>
+                    </div>
+                    <div class="grid grid-cols-2 gap-4 text-sm">
+                        <div><strong>Receipt Number:</strong> DRG-2024-XXXX</div>
+                        <div><strong>Transaction ID:</strong> [UPI Transaction ID]</div>
+                        <div><strong>Payment Date:</strong> [DD/MM/YYYY HH:MM]</div>
+                        <div><strong>Payment Method:</strong> UPI (GPay/PhonePe/Paytm)</div>
+                        <div><strong>Amount Paid:</strong> ₹[Amount]</div>
+                        <div><strong>Booking Reference:</strong> [Booking ID]</div>
+                    </div>
+                </div>
+
+                <div class="text-center pt-4 border-t">
+                    <p class="text-xs text-slate-500">This receipt is automatically generated upon successful payment verification.</p>
+                    <p class="text-xs text-slate-500">For any queries, contact: +91 8084970887</p>
+                </div>
+            </div>
+        `
+    },
+    3: {
+        title: 'Medical Fitness Certificate',
+        content: `
+            <div class="space-y-6">
+                <h3 class="text-2xl font-bold text-slate-900 mb-6">Medical Fitness Certificate</h3>
+                
+                <div class="bg-red-50 border-2 border-red-200 p-6 rounded-2xl">
+                    <h4 class="font-bold text-red-800 mb-4">Physician's Certification</h4>
+                    <div class="text-sm text-red-700 space-y-3">
+                        <p><strong>Patient Name:</strong> [Player Name]</p>
+                        <p><strong>Age:</strong> [Age] years</p>
+                        <p><strong>Examination Date:</strong> [DD/MM/YYYY]</p>
+                        <p><strong>Certificate Valid Until:</strong> [DD/MM/YYYY]</p>
+                    </div>
+                </div>
+
+                <div class="bg-green-50 p-6 rounded-2xl">
+                    <h4 class="font-bold text-green-800 mb-3">Fitness Declaration</h4>
+                    <p class="text-sm text-green-700 leading-relaxed">
+                        I, Dr. [Physician Name], MBBS, after conducting a thorough medical examination, 
+                        hereby certify that the above-named individual is medically fit to participate in 
+                        basketball training activities at Dribble Ground Academy.
+                    </p>
+                </div>
+            </div>
+        `
+    },
+    4: {
+        title: 'Indemnity & Waiver Form',
+        content: `
+            <div class="space-y-6">
+                <h3 class="text-2xl font-bold text-slate-900 mb-6">Liability Waiver & Indemnity Form</h3>
+                
+                <div class="bg-purple-50 border-2 border-purple-200 p-6 rounded-2xl">
+                    <h4 class="font-bold text-purple-800 mb-4">Participant Declaration</h4>
+                    <p class="text-sm text-purple-700 leading-relaxed mb-4">
+                        I, [Participant Name], hereby acknowledge and agree to the following terms and conditions 
+                        for my participation in basketball training activities at Dribble Ground Academy.
+                    </p>
+                </div>
+
+                <div class="bg-slate-50 p-6 rounded-2xl">
+                    <h4 class="font-bold text-slate-900 mb-4">Risk Acknowledgement</h4>
+                    <ul class="text-sm text-slate-700 space-y-2 list-disc list-inside">
+                        <li>I understand that basketball involves inherent risks of physical injury</li>
+                        <li>I acknowledge that accidents can occur despite safety precautions</li>
+                        <li>I voluntarily assume all risks associated with training participation</li>
+                    </ul>
+                </div>
+            </div>
+        `
+    },
+    5: {
+        title: 'Code of Conduct',
+        content: `
+            <div class="space-y-6">
+                <h3 class="text-2xl font-bold text-slate-900 mb-6">Dribble Ground Academy - Code of Conduct</h3>
+                
+                <div class="bg-orange-50 border-2 border-orange-200 p-6 rounded-2xl">
+                    <h4 class="font-bold text-orange-800 mb-4">Academy Values & Principles</h4>
+                    <p class="text-sm text-orange-700 leading-relaxed">
+                        All members of Dribble Ground Academy are expected to uphold the highest standards 
+                        of sportsmanship, respect, and integrity both on and off the court.
+                    </p>
+                </div>
+
+                <div class="bg-slate-50 p-6 rounded-2xl">
+                    <h4 class="font-bold text-slate-900 mb-4">Behavioral Expectations</h4>
+                    <ul class="text-sm text-slate-700 space-y-2 list-disc list-inside">
+                        <li><strong>Punctuality:</strong> Arrive 10 minutes before scheduled training time</li>
+                        <li><strong>Respect for Coaches:</strong> Follow instructions and maintain respectful communication</li>
+                        <li><strong>Fair Play:</strong> Demonstrate good sportsmanship during all activities</li>
+                        <li><strong>Equipment Care:</strong> Handle academy equipment with care and return items properly</li>
+                        <li><strong>No Substance Abuse:</strong> Strictly prohibited during academy hours and events</li>
+                    </ul>
+                </div>
+            </div>
+        `
+    },
+    6: {
+        title: 'Refund & Cancellation Policy',
+        content: `
+            <div class="space-y-6">
+                <h3 class="text-2xl font-bold text-slate-900 mb-6">Refund & Cancellation Policy</h3>
+                
+                <div class="bg-yellow-50 border-2 border-yellow-200 p-6 rounded-2xl">
+                    <h4 class="font-bold text-yellow-800 mb-4">Policy Overview</h4>
+                    <p class="text-sm text-yellow-700 leading-relaxed">
+                        This policy outlines the terms and conditions for booking cancellations, refunds, 
+                        and schedule changes at Dribble Ground Academy.
+                    </p>
+                </div>
+
+                <div class="bg-slate-50 p-6 rounded-2xl">
+                    <h4 class="font-bold text-slate-900 mb-4">Cancellation Policy</h4>
+                    <ul class="text-sm text-slate-700 space-y-2 list-disc list-inside">
+                        <li><strong>24-Hour Notice:</strong> Full refund if cancelled 24+ hours before session</li>
+                        <li><strong>12-24 Hour Notice:</strong> 50% refund if cancelled within 12-24 hours</li>
+                        <li><strong>Less than 12 Hours:</strong> No refund provided</li>
+                        <li><strong>No-Show:</strong> Full fee charged without refund</li>
+                    </ul>
+                </div>
+            </div>
+        `
+    },
+    7: {
+        title: 'Training Schedule',
+        content: `
+            <div class="space-y-6">
+                <h3 class="text-2xl font-bold text-slate-900 mb-6">Weekly Training Schedule</h3>
+                
+                <div class="bg-cyan-50 border-2 border-cyan-200 p-6 rounded-2xl">
+                    <h4 class="font-bold text-cyan-800 mb-4">Academy Timings</h4>
+                    <div class="grid grid-cols-2 gap-4 text-sm text-cyan-700">
+                        <div><strong>Training Days:</strong> Monday to Saturday</div>
+                        <div><strong>Rest Day:</strong> Sunday</div>
+                        <div><strong>Daily Hours:</strong> 9:00 AM - 6:00 PM</div>
+                        <div><strong>Office Hours:</strong> 8:00 AM - 8:00 PM</div>
+                    </div>
+                </div>
+
+                <div class="bg-slate-50 p-6 rounded-2xl">
+                    <h4 class="font-bold text-slate-900 mb-4">Weekly Schedule Overview</h4>
+                    <div class="space-y-3">
+                        <div class="flex justify-between items-center p-3 bg-blue-50 rounded-xl">
+                            <span class="font-bold text-blue-800">Monday</span>
+                            <span class="text-sm text-blue-600">Dribbling & Ball Handling</span>
+                        </div>
+                        <div class="flex justify-between items-center p-3 bg-green-50 rounded-xl">
+                            <span class="font-bold text-green-800">Tuesday</span>
+                            <span class="text-sm text-green-600">Shooting & Scoring</span>
+                        </div>
+                        <div class="flex justify-between items-center p-3 bg-purple-50 rounded-xl">
+                            <span class="font-bold text-purple-800">Wednesday</span>
+                            <span class="text-sm text-purple-600">Defense & Rebounding</span>
+                        </div>
+                        <div class="flex justify-between items-center p-3 bg-orange-50 rounded-xl">
+                            <span class="font-bold text-orange-800">Thursday</span>
+                            <span class="text-sm text-orange-600">Passing & Team Play</span>
+                        </div>
+                        <div class="flex justify-between items-center p-3 bg-red-50 rounded-xl">
+                            <span class="font-bold text-red-800">Friday</span>
+                            <span class="text-sm text-red-600">Game Strategy & Tactics</span>
+                        </div>
+                        <div class="flex justify-between items-center p-3 bg-yellow-50 rounded-xl">
+                            <span class="font-bold text-yellow-800">Saturday</span>
+                            <span class="text-sm text-yellow-600">Practice Matches & Scrimmage</span>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        `
+    },
+    8: {
+        title: 'Emergency Contact Form',
+        content: `
+            <div class="space-y-6">
+                <h3 class="text-2xl font-bold text-slate-900 mb-6">Emergency Contact Information</h3>
+                
+                <div class="bg-red-50 border-2 border-red-200 p-6 rounded-2xl">
+                    <h4 class="font-bold text-red-800 mb-4">Critical Information - Medical Emergencies</h4>
+                    <p class="text-sm text-red-700 leading-relaxed">
+                        This form contains vital information that will be used in case of medical emergencies 
+                        during training sessions. Please ensure all information is accurate and up-to-date.
+                    </p>
+                </div>
+
+                <div class="bg-slate-50 p-6 rounded-2xl">
+                    <h4 class="font-bold text-slate-900 mb-4">Player Information</h4>
+                    <div class="grid grid-cols-2 gap-4 text-sm">
+                        <div><strong>Full Name:</strong> [Player Name]</div>
+                        <div><strong>Age:</strong> [Age] years</div>
+                        <div><strong>Date of Birth:</strong> [DD/MM/YYYY]</div>
+                        <div><strong>Blood Group:</strong> [A+/B+/O+/AB+ etc.]</div>
+                        <div><strong>Height:</strong> [X'X"] / [XXX cm]</div>
+                        <div><strong>Weight:</strong> [XX kg]</div>
+                    </div>
+                </div>
+
+                <div class="bg-slate-50 p-6 rounded-2xl">
+                    <h4 class="font-bold text-slate-900 mb-4">Primary Emergency Contact</h4>
+                    <div class="grid grid-cols-2 gap-4 text-sm">
+                        <div><strong>Contact Name:</strong> [Primary Contact Name]</div>
+                        <div><strong>Relationship:</strong> [Parent/Guardian/Spouse]</div>
+                        <div><strong>Mobile Number:</strong> [+91 XXXXX XXXXX]</div>
+                        <div><strong>Alternative Number:</strong> [+91 XXXXX XXXXX]</div>
+                        <div><strong>Email:</strong> [email@example.com]</div>
+                        <div><strong>WhatsApp:</strong> [+91 XXXXX XXXXX]</div>
+                    </div>
+                </div>
+            </div>
+        `
+    }
+};
+
+function showDocumentModal(documentId) {
+    console.log('Showing document modal for ID:', documentId);
+    const doc = fakeDocumentContent[documentId];
+    if (!doc) {
+        console.error('Document not found for ID:', documentId);
+        return;
+    }
+
+    // Create modal if it doesn't exist
+    let modal = document.getElementById('documentModal');
+    if (!modal) {
+        modal = document.createElement('div');
+        modal.id = 'documentModal';
+        modal.className = 'fixed inset-0 bg-black bg-opacity-50 z-50 hidden flex items-center justify-center p-4';
+        modal.innerHTML = `
+            <div class="bg-white rounded-[2rem] max-w-4xl w-full max-h-[90vh] overflow-hidden shadow-2xl">
+                <div class="p-8 border-b border-slate-100 flex justify-between items-center">
+                    <h3 id="modalTitle" class="text-2xl font-bold text-slate-900"></h3>
+                    <button onclick="hideDocumentModal()" class="p-2 hover:bg-slate-100 rounded-xl transition-colors">
+                        <i data-lucide="x" class="w-6 h-6 text-slate-600"></i>
+                    </button>
+                </div>
+                <div id="modalContent" class="p-8 overflow-y-auto max-h-[calc(90vh-120px)]">
+                    <!-- Content will be inserted here -->
+                </div>
+            </div>
+        `;
+        document.body.appendChild(modal);
+    }
+
+    // Set content
+    document.getElementById('modalTitle').textContent = doc.title;
+    document.getElementById('modalContent').innerHTML = doc.content;
+    
+    // Show modal
+    modal.classList.remove('hidden');
+    
+    // Reinitialize lucide icons
+    if (typeof lucide !== 'undefined') lucide.createIcons();
+}
+
+function hideDocumentModal() {
+    const modal = document.getElementById('documentModal');
+    if (modal) {
+        modal.classList.add('hidden');
+    }
+}
