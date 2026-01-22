@@ -1,6 +1,7 @@
 {
     "version": 2,
     "name": "dribble-ground-academy",
+    "outputDirectory": ".",
     "cleanUrls": true,
     "trailingSlash": false,
     "headers": [
