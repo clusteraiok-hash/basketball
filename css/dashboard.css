@@ -9,20 +9,38 @@
     --border-grey: #E5E7EB;
 }
 
+/* ==================== BASE STYLES ==================== */
+* {
+    box-sizing: border-box;
+    -webkit-tap-highlight-color: transparent;
+}
+
+html {
+    scroll-behavior: smooth;
+    -webkit-text-size-adjust: 100%;
+}
+
 body {
-    font-family: 'Inter', sans-serif;
+    font-family: 'Inter', -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, sans-serif;
     background-color: var(--surface-bg);
     color: var(--text-main);
+    min-height: 100vh;
+    min-height: 100dvh;
+    /* Dynamic viewport height for mobile */
+    overflow-x: hidden;
+    -webkit-font-smoothing: antialiased;
+    -moz-osx-font-smoothing: grayscale;
 }
 
 .font-display {
-    font-family: 'Oswald', sans-serif;
+    font-family: 'Oswald', -apple-system, BlinkMacSystemFont, sans-serif;
 }
 
-/* Sidebar Styling */
+/* ==================== RESPONSIVE SIDEBAR ==================== */
 .sidebar-link {
     color: var(--sidebar-text);
     transition: all 0.2s ease;
+    touch-action: manipulation;
 }
 
 .sidebar-link.active {
@@ -37,7 +55,130 @@ body {
     color: var(--text-main);
 }
 
-/* Booking Step Indicators */
+/* Mobile Sidebar Overlay */
+.sidebar-overlay {
+    position: fixed;
+    inset: 0;
+    background: rgba(0, 0, 0, 0.5);
+    z-index: 35;
+    opacity: 0;
+    visibility: hidden;
+    transition: all 0.3s ease;
+}
+
+.sidebar-overlay.active {
+    opacity: 1;
+    visibility: visible;
+}
+
+/* ==================== RESPONSIVE BREAKPOINTS ==================== */
+
+/* Extra Small Devices (phones, less than 640px) */
+@media (max-width: 639px) {
+
+    /* Smaller padding on mobile */
+    .p-8 {
+        padding: 1rem;
+    }
+
+    .p-6 {
+        padding: 0.75rem;
+    }
+
+    .px-8 {
+        padding-left: 1rem;
+        padding-right: 1rem;
+    }
+
+    .py-6 {
+        padding-top: 0.75rem;
+        padding-bottom: 0.75rem;
+    }
+
+    /* Smaller text on mobile */
+    .text-4xl {
+        font-size: 1.75rem;
+        line-height: 2rem;
+    }
+
+    .text-3xl {
+        font-size: 1.5rem;
+        line-height: 1.75rem;
+    }
+
+    .text-2xl {
+        font-size: 1.25rem;
+        line-height: 1.5rem;
+    }
+
+    /* Single column stats on mobile */
+    #stats-grid {
+        grid-template-columns: repeat(2, 1fr) !important;
+        gap: 0.75rem !important;
+    }
+
+    #stats-grid>div {
+        height: auto !important;
+        min-height: 100px;
+        padding: 1rem !important;
+    }
+
+    /* Smaller rounded corners on mobile */
+    .rounded-\[2rem\],
+    .rounded-\[2\.5rem\] {
+        border-radius: 1rem;
+    }
+
+    /* Full width buttons on mobile */
+    .flex.flex-col.sm\:flex-row {
+        flex-direction: column !important;
+    }
+
+    /* Hide featured image on small screens */
+    .hidden.md\:block {
+        display: none !important;
+    }
+
+    /* Booking cards stack on mobile */
+    .booking-type-card {
+        padding: 1.5rem !important;
+    }
+
+    /* Modal fullscreen on mobile */
+    #userModal>div>div {
+        max-width: 100% !important;
+        margin: 0.5rem;
+        border-radius: 1.5rem;
+    }
+}
+
+/* Small Devices (landscape phones, 640px and up) */
+@media (min-width: 640px) and (max-width: 767px) {
+    #stats-grid {
+        grid-template-columns: repeat(2, 1fr) !important;
+    }
+}
+
+/* Medium Devices (tablets, 768px and up) */
+@media (min-width: 768px) and (max-width: 1023px) {
+    #stats-grid {
+        grid-template-columns: repeat(2, 1fr) !important;
+    }
+
+    /* Sidebar width adjustment for tablets */
+    #sidebar {
+        width: 280px;
+    }
+}
+
+/* Large Devices (desktops, 1024px and up) */
+@media (min-width: 1024px) {
+    #stats-grid {
+        grid-template-columns: repeat(4, 1fr) !important;
+    }
+}
+
+/* ==================== BOOKING STEP INDICATORS ==================== */
 .step-active {
     background: var(--primary-accent);
     color: #000;
@@ -54,7 +195,7 @@ body {
     color: #475569;
 }
 
-/* Scrollbar */
+/* ==================== SCROLLBAR ==================== */
 .no-scrollbar::-webkit-scrollbar {
     display: none;
 }
@@ -64,7 +205,29 @@ body {
     scrollbar-width: none;
 }
 
-/* Transitions */
+/* Custom Scrollbar for larger screens */
+@media (min-width: 1024px) {
+    ::-webkit-scrollbar {
+        width: 8px;
+        height: 8px;
+    }
+
+    ::-webkit-scrollbar-track {
+        background: #F1F5F9;
+        border-radius: 4px;
+    }
+
+    ::-webkit-scrollbar-thumb {
+        background: #CBD5E1;
+        border-radius: 4px;
+    }
+
+    ::-webkit-scrollbar-thumb:hover {
+        background: #94A3B8;
+    }
+}
+
+/* ==================== TRANSITIONS & ANIMATIONS ==================== */
 .section-content {
     animation: fadeIn 0.4s cubic-bezier(0.4, 0, 0.2, 1);
 }
@@ -81,7 +244,25 @@ body {
     }
 }
 
-/* Premium Cards */
+/* Real-time update pulse animation */
+@keyframes pulse-update {
+
+    0%,
+    100% {
+        opacity: 1;
+    }
+
+    50% {
+        opacity: 0.7;
+        background-color: rgba(252, 211, 77, 0.1);
+    }
+}
+
+.data-updating {
+    animation: pulse-update 0.5s ease-in-out;
+}
+
+/* ==================== PREMIUM CARDS ==================== */
 .glass-card {
     background: #FFFFFF;
     border: 1px solid #E2E8F0;
@@ -91,4 +272,181 @@ body {
 
 .glass-card:hover {
     box-shadow: 0 10px 15px -3px rgba(0, 0, 0, 0.08);
+}
+
+/* ==================== TOUCH-FRIENDLY STYLES ==================== */
+@media (hover: none) and (pointer: coarse) {
+
+    /* Disable hover effects on touch devices */
+    .hover\:bg-slate-50:hover,
+    .hover\:bg-primary:hover,
+    .hover\:shadow-2xl:hover {
+        transition: none;
+    }
+
+    /* Larger touch targets */
+    button,
+    a,
+    .sidebar-link {
+        min-height: 44px;
+        min-width: 44px;
+    }
+
+    /* Active state instead of hover */
+    button:active,
+    a:active {
+        transform: scale(0.98);
+        opacity: 0.9;
+    }
+}
+
+/* ==================== CROSS-BROWSER FIXES ==================== */
+
+/* Safari flexbox fix */
+.flex {
+    -webkit-box-flex: 1;
+}
+
+/* Firefox button fix */
+button::-moz-focus-inner {
+    border: 0;
+}
+
+/* IE/Edge placeholder color fix */
+::placeholder {
+    color: #9CA3AF;
+    opacity: 1;
+}
+
+:-ms-input-placeholder {
+    color: #9CA3AF;
+}
+
+::-ms-input-placeholder {
+    color: #9CA3AF;
+}
+
+/* Safari input appearance fix */
+input,
+textarea,
+select {
+    -webkit-appearance: none;
+    -moz-appearance: none;
+    appearance: none;
+}
+
+/* Fix for iOS input zoom */
+@media screen and (max-width: 767px) {
+
+    input,
+    textarea,
+    select {
+        font-size: 16px !important;
+    }
+}
+
+/* ==================== PRINT STYLES ==================== */
+@media print {
+
+    #sidebar,
+    .mobile-header,
+    button {
+        display: none !important;
+    }
+
+    main {
+        margin: 0 !important;
+        padding: 0 !important;
+    }
+}
+
+/* ==================== ACCESSIBILITY ==================== */
+@media (prefers-reduced-motion: reduce) {
+
+    *,
+    *::before,
+    *::after {
+        animation-duration: 0.01ms !important;
+        animation-iteration-count: 1 !important;
+        transition-duration: 0.01ms !important;
+    }
+}
+
+/* Focus visible styles */
+:focus-visible {
+    outline: 2px solid var(--primary-accent);
+    outline-offset: 2px;
+}
+
+/* Skip to content link */
+.skip-link {
+    position: absolute;
+    top: -100%;
+    left: 0;
+    background: var(--primary-accent);
+    color: #000;
+    padding: 0.5rem 1rem;
+    z-index: 100;
+    font-weight: 700;
+}
+
+.skip-link:focus {
+    top: 0;
+}
+
+/* ==================== SAFE AREA FOR MODERN PHONES ==================== */
+@supports (padding: max(0px)) {
+    body {
+        padding-left: max(0px, env(safe-area-inset-left));
+        padding-right: max(0px, env(safe-area-inset-right));
+    }
+
+    .sticky.top-0 {
+        top: max(0px, env(safe-area-inset-top));
+    }
+
+    #sidebar {
+        padding-bottom: max(1rem, env(safe-area-inset-bottom));
+    }
+}
+
+/* ==================== LOADING STATES ==================== */
+.skeleton {
+    background: linear-gradient(90deg, #E2E8F0 25%, #F1F5F9 50%, #E2E8F0 75%);
+    background-size: 200% 100%;
+    animation: skeleton-loading 1.5s infinite;
+    border-radius: 0.5rem;
+}
+
+@keyframes skeleton-loading {
+    0% {
+        background-position: 200% 0;
+    }
+
+    100% {
+        background-position: -200% 0;
+    }
+}
+
+/* ==================== CONNECTION STATUS ==================== */
+.connection-status {
+    position: fixed;
+    bottom: 1rem;
+    right: 1rem;
+    padding: 0.5rem 1rem;
+    border-radius: 9999px;
+    font-size: 0.75rem;
+    font-weight: 700;
+    z-index: 100;
+    transition: all 0.3s ease;
+}
+
+.connection-status.online {
+    background: #10B981;
+    color: white;
+}
+
+.connection-status.offline {
+    background: #EF4444;
+    color: white;
 }

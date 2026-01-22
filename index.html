@@ -19,8 +19,20 @@
         href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600&amp;family=Oswald:wght@500;600;700&amp;display=swap"
         rel="stylesheet">
     <style>
+        * {
+            box-sizing: border-box;
+            -webkit-tap-highlight-color: transparent;
+        }
+
+        html {
+            scroll-behavior: smooth;
+            -webkit-text-size-adjust: 100%;
+        }
+
         body {
-            font-family: 'Inter', sans-serif;
+            font-family: 'Inter', -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, sans-serif;
+            -webkit-font-smoothing: antialiased;
+            -moz-osx-font-smoothing: grayscale;
         }
 
         h1,
@@ -52,6 +64,78 @@
         ::-webkit-scrollbar-thumb {
             background: #333;
             border-radius: 3px;
+        }
+
+        /* Mobile responsive adjustments */
+        @media (max-width: 767px) {
+
+            .text-6xl,
+            .text-7xl {
+                font-size: 2.5rem;
+                line-height: 1.1;
+            }
+
+            .text-5xl {
+                font-size: 2rem;
+            }
+
+            .text-4xl {
+                font-size: 1.75rem;
+            }
+
+            .gap-8 {
+                gap: 1.5rem;
+            }
+
+            .p-8,
+            .px-8 {
+                padding-left: 1.5rem;
+                padding-right: 1.5rem;
+            }
+
+            .py-8 {
+                padding-top: 1.5rem;
+                padding-bottom: 1.5rem;
+            }
+        }
+
+        /* Safe area for modern phones */
+        @supports (padding: max(0px)) {
+            body {
+                padding-left: max(0px, env(safe-area-inset-left));
+                padding-right: max(0px, env(safe-area-inset-right));
+            }
+
+            .sticky.top-0 {
+                top: max(0px, env(safe-area-inset-top));
+            }
+        }
+
+        /* Touch-friendly buttons */
+        @media (hover: none) and (pointer: coarse) {
+
+            button,
+            a[href] {
+                min-height: 44px;
+            }
+
+            button:active,
+            a[href]:active {
+                transform: scale(0.98);
+                opacity: 0.9;
+            }
+        }
+
+        /* Reduced motion preference */
+        @media (prefers-reduced-motion: reduce) {
+
+            *,
+            *::before,
+            *::after {
+                animation-duration: 0.01ms !important;
+                animation-iteration-count: 1 !important;
+                transition-duration: 0.01ms !important;
+            }
         }
     </style>
 </head>

@@ -1,7 +1,7 @@
 /**
  * Dashboard UI Logic - Production Grade
  * Optimized for localStorage-based data management
- * @version 2.0.0
+ * @version 2.1.0 - Responsive & Real-time
  */
 
 // ==================== BOOKING FLOW STATE ====================
@@ -11,6 +11,10 @@ const bookingState = {
     players: 1,
     amount: 0
 };
+
+// ==================== REAL-TIME UPDATE INTERVAL ====================
+let realTimeInterval = null;
+const REAL_TIME_UPDATE_MS = 5000; // Update every 5 seconds
 
 // ==================== INITIALIZATION ====================
 document.addEventListener('DOMContentLoaded', () => {
@@ -46,6 +50,169 @@ function initializeDashboard() {
 
     // Show admin menu if user is admin
     setupAdminMenu();
+
+    // Setup mobile sidebar overlay
+    setupMobileSidebar();
+
+    // Setup real-time updates
+    startRealTimeUpdates();
+
+    // Setup connection status indicator
+    setupConnectionStatus();
+
+    // Handle window resize for responsive behavior
+    setupResizeHandler();
+
+    // Listen for storage changes (cross-tab sync)
+    window.addEventListener('storage', handleStorageChange);
+}
+
+/**
+ * Setup mobile sidebar overlay behavior
+ */
+function setupMobileSidebar() {
+    // Create overlay element if not exists
+    let overlay = document.getElementById('sidebar-overlay');
+    if (!overlay) {
+        overlay = document.createElement('div');
+        overlay.id = 'sidebar-overlay';
+        overlay.className = 'sidebar-overlay lg:hidden';
+        overlay.onclick = closeMobileSidebar;
+        document.body.appendChild(overlay);
+    }
+
+    // Update sidebar toggle to also show overlay
+    const sidebar = document.getElementById('sidebar');
+    if (sidebar) {
+        // Watch for sidebar visibility changes
+        const observer = new MutationObserver((mutations) => {
+            mutations.forEach((mutation) => {
+                if (mutation.attributeName === 'class') {
+                    const isOpen = !sidebar.classList.contains('-translate-x-full');
+                    overlay.classList.toggle('active', isOpen);
+                    document.body.style.overflow = isOpen ? 'hidden' : '';
+                }
+            });
+        });
+        observer.observe(sidebar, { attributes: true });
+    }
+}
+
+/**
+ * Close mobile sidebar
+ */
+function closeMobileSidebar() {
+    const sidebar = document.getElementById('sidebar');
+    const overlay = document.getElementById('sidebar-overlay');
+    if (sidebar) sidebar.classList.add('-translate-x-full');
+    if (overlay) overlay.classList.remove('active');
+    document.body.style.overflow = '';
+}
+
+/**
+ * Start real-time data updates
+ */
+function startRealTimeUpdates() {
+    // Clear existing interval
+    if (realTimeInterval) clearInterval(realTimeInterval);
+
+    // Reload data from localStorage periodically
+    realTimeInterval = setInterval(() => {
+        // Reload data from localStorage
+        if (window.userManager) window.userManager.loadUsers();
+        if (window.bookingManager) window.bookingManager.loadBookings();
+
+        // Refresh current section
+        refreshCurrentSection();
+    }, REAL_TIME_UPDATE_MS);
+}
+
+/**
+ * Refresh current section data
+ */
+function refreshCurrentSection() {
+    const sections = ['overview', 'my-bookings', 'bookings', 'admin', 'crm', 'documents'];
+    for (const sectionId of sections) {
+        const section = document.getElementById(sectionId + '-section');
+        if (section && !section.classList.contains('hidden')) {
+            loadSectionData(sectionId);
+            break;
+        }
+    }
+}
+
+/**
+ * Handle localStorage changes from other tabs
+ * @param {StorageEvent} e - Storage event
+ */
+function handleStorageChange(e) {
+    if (e.key && e.key.startsWith('dg_')) {
+        // Reload managers and refresh UI
+        if (window.userManager) window.userManager.loadUsers();
+        if (window.bookingManager) window.bookingManager.loadBookings();
+        refreshCurrentSection();
+
+        // Show update notification
+        Utils.showToast('Data updated from another tab', 'info');
+    }
+}
+
+/**
+ * Setup connection status indicator
+ */
+function setupConnectionStatus() {
+    // Create status indicator
+    let status = document.getElementById('connection-status');
+    if (!status) {
+        status = document.createElement('div');
+        status.id = 'connection-status';
+        status.className = 'connection-status online';
+        status.innerHTML = '<span>●</span> Online';
+        status.style.display = 'none'; // Hidden by default, show on offline
+        document.body.appendChild(status);
+    }
+
+    // Update on online/offline events
+    window.addEventListener('online', () => {
+        status.className = 'connection-status online';
+        status.innerHTML = '<span>●</span> Online';
+        setTimeout(() => { status.style.display = 'none'; }, 2000);
+
+        // Refresh data when coming back online
+        refreshCurrentSection();
+    });
+
+    window.addEventListener('offline', () => {
+        status.className = 'connection-status offline';
+        status.innerHTML = '<span>●</span> Offline';
+        status.style.display = 'block';
+    });
+
+    // Initial state
+    if (!navigator.onLine) {
+        status.className = 'connection-status offline';
+        status.innerHTML = '<span>●</span> Offline';
+        status.style.display = 'block';
+    }
+}
+
+/**
+ * Setup window resize handler
+ */
+function setupResizeHandler() {
+    let resizeTimeout;
+    window.addEventListener('resize', () => {
+        clearTimeout(resizeTimeout);
+        resizeTimeout = setTimeout(() => {
+            // Close mobile sidebar on resize to desktop
+            if (window.innerWidth >= 1024) {
+                closeMobileSidebar();
+            }
+
+            // Reinitialize icons after resize
+            if (typeof lucide !== 'undefined') lucide.createIcons();
+        }, 250);
+    });
 }
 
 /**
@@ -116,6 +283,11 @@ function showLoadingOverlay(show) {
  * @param {string} sectionId - Section identifier
  */
 function showSection(sectionId) {
+    // Close mobile sidebar when navigating
+    if (window.innerWidth < 1024) {
+        closeMobileSidebar();
+    }
+
     // Update sidebar links
     document.querySelectorAll('.sidebar-link').forEach(link => {
         link.classList.remove('active', 'bg-slate-50', 'text-slate-900');
@@ -137,6 +309,11 @@ function showSection(sectionId) {
     if (targetSection) {
         targetSection.classList.remove('hidden');
         loadSectionData(sectionId);
+    }
+
+    // Scroll to top smoothly on mobile
+    if (window.innerWidth < 1024) {
+        window.scrollTo({ top: 0, behavior: 'smooth' });
     }
 
     // Re-initialize icons
